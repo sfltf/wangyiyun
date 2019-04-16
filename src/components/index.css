@@ -1,0 +1,205 @@
+.index-top {
+	width: 100%;
+	background: #242424;
+}
+.top {
+	width: 1100px;
+	height: 70px;
+	margin: 0 auto;	
+}
+
+.top-bg {
+	float: left;
+	width: 176px;
+	height: 70px;
+	background: url(../assets/images/topbar.png) no-repeat 0 9999px;
+	background-position: 0 0;
+}
+
+.web-name {
+	font-size: 0;
+	float: left;
+	width: 176px;
+	height: 70px;
+}
+
+.main-nav {
+	position: relative;
+	float: left;
+}
+
+.main-nav-total {
+	float: left;
+}
+
+.main-nav-list {
+	position: relative;
+	float: left;
+	height: 70px;
+	line-height: 70px;
+	cursor: pointer;
+}
+
+.main-nav-list > a {
+	color: #ccc;
+	text-decoration: none;
+	padding: 0 15px;
+	height: 70px;
+	font-size: 14px;
+} 
+
+.active {
+	background: #000;	
+}
+
+.active > a {
+	color: #fff;
+	position: relative;
+	display: block;
+}
+
+.el-input__inner {
+	width: 158px;
+	height: 32px;
+	border-radius: 16px;
+	margin-top: 19px;
+}
+
+.el-input.is-active .el-input__inner, .el-input__inner:focus {
+	border-color: #c0c4cc;
+}
+
+.el-icon-search {
+	color: #000;
+	margin-top: 8px;
+}
+
+.top-prompt {
+	position: absolute;
+	display: none;
+	width: 12px;
+	height: 7px;
+	bottom: -1px;
+	left: 50%;
+	margin-left: -6px; 
+	background-position: -226px 0;
+}
+
+.currentShow {
+	display: block;
+}
+
+.hot {
+	position: relative;
+    right: 10px;
+    top: 20px;
+    width: 28px;
+    height: 19px;
+    background-position: -190px 0;
+}
+
+.creater-center {
+	float: left;
+	width: 90px;
+	height: 32px;
+	line-height: 32px;
+	border-radius: 16px;
+	border: 1px solid #4f4f4f;
+	margin-top: 19px;
+	margin-left: 15px;	
+}
+
+.creater-center:hover {
+	border-color: #fff;
+	color: #fff;
+}
+
+
+.creater-center a {
+	color: #ccc;
+	font-size: 12px;
+}
+
+.login {
+	float: left;
+	position: relative;
+}
+
+.login-icon {
+	width: 70px;
+	height: 70px;
+	line-height: 70px;
+	background-position: right -30px;
+}
+
+.login-icon span {
+	font-size: 12px;
+	color: #787878;
+	cursor: pointer;
+}
+
+.login-tip {
+	display: none;
+	position: absolute;
+	top: 60px;
+	right: -43px;
+	width: 158px;	
+	border-radius: 4px;	
+	border: 1px solid #202020;
+	box-shadow: 0 8px 24px 0 rgba(0,0,0,0.50)
+}
+
+.login-tip:before {
+	content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    margin-left: -10px;
+    width: 0;
+    height: 0;
+    border-width: 0 10px 10px;
+    border-style: solid;
+    border-color: transparent transparent #2b2b2b;
+}
+
+.login-tip-list {
+	height: 38px;
+	line-height: 38px;
+	border-bottom: 1px solid #000;
+	background: #2b2b2b;	
+}
+
+.login-tip-list > a {
+	font-size: 12px;
+	color: #ccc;
+}
+
+.login-tip-icon {
+	display: inline-block;
+	vertical-align: middle;
+    margin-left: -10px;
+	width: 18px;
+	height: 18px;
+	background: url('../assets/images/toplist.png') no-repeat 0 9999px;
+}
+
+.icon-mb {	
+	background-position: 0 0;
+}
+
+.icon-vx {
+	background-position: -20px -20px;
+}
+
+.icon-qq {
+	background-position: -20px -40px;
+}
+
+.icon-sn {
+	background-position: 0px -20px;
+}
+
+.icon-wy {
+	background-position: 0px -40px;
+}
+
