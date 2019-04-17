@@ -1,0 +1,47 @@
+.topic-top {
+	position: relative;
+	width: 100%;
+	height: 33px;
+	border-bottom: 2px solid #C10D0C;
+	
+}
+
+.topic-top-bg {
+	background-image: url(/static/images/index.png);	
+}
+
+.topic-top-sign {
+	position: absolute;
+	left: 5px;
+	display: inline-block;
+	width: 33px;
+	height: 33px;
+	background-position: -225px -156px;
+}
+
+.topic-top-title {
+	position: absolute;
+	left: 45px;
+	font-size: 20px;
+}
+
+.topic-top-more a {
+	position: absolute;
+	font-size: 12px;
+	color: #666;
+	right: 30px;
+	top: 6px;
+}
+
+.topic-top-more a:hover {
+	text-decoration: underline;
+}
+
+.more-icon {
+	position: absolute;
+	right: 10px;
+	top: 8px;
+	width: 12px;
+	height: 12px;
+	background-position: 0 -240px;
+}

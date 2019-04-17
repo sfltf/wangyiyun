@@ -4,17 +4,17 @@
 			<ul class="subMeun-total">
 				<li class="subMeun-list" v-for="(item,index) in subMenu" @click="chooseTap(index)">
 					<a href="javascript:;">
-						<span >{{item.title}}</span>
+						<span :class="{'subMeun-list-active': item.isShow}">{{item.title}}</span>
 					</a>
 				</li>
 			</ul>		
 		</nav>
-		<recommend v-if="isShow"></recommend>
-		<leaderboard v-else-if="isShow"></leaderboard>
-		<songList v-else-if="isShow"></songList>
-		<anchorRadio v-else-if="isShow"></anchorRadio>
-		<singer v-else-if="isShow"></singer>
-		<newDiscShelf v-else-if="isShow"></newDiscShelf>
+		<recommend v-if="isShow[0]"></recommend>
+		<leaderboard v-else-if="isShow[1]"></leaderboard>
+		<songList v-else-if="isShow[2]"></songList>
+		<anchorRadio v-else-if="isShow[3]"></anchorRadio>
+		<singer v-else-if="isShow[4]"></singer>
+		<newDiscShelf v-else-if="isShow[5]"></newDiscShelf>
 	</div>
 </template>
 <script>
@@ -48,15 +48,14 @@
 		},
 		methods: {
 			chooseTap(val) {
-				console.log(val)
 				let _self = this;
 				this.subMenu.forEach(function(item,index) {
 					if(index === val) {
 						item.isShow = true;
-						_self.isShow[val] = true;
+						_self.isShow[index] = true;
 					}else {
 						item.isShow = false;
-						_self.isShow[val] = false;
+						_self.isShow[index] = false;
 					}
 				})
 			}

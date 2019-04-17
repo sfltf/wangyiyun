@@ -1,0 +1,1 @@
+:style="{backgroundImage: carouselBg[index].bgSrc}"

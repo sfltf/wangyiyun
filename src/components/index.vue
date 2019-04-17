@@ -94,13 +94,11 @@ export default {
       })
     },
     focus: function(el) {
-      console.log(el)
       el.children[0].addEventListener('click',function() {
         this.setAttribute('placeholder','');
       })
 
       el.children[0].addEventListener('blur',function() {
-        console.log(this)
         this.setAttribute('placeholder','音乐/视频/电台/用户');
       })
     }

@@ -1,0 +1,44 @@
+.sub-content {
+	margin: 20px 0 -42px;
+}
+
+.sub-content-total {
+	overflow: hidden;
+}
+.sub-content-list {
+	float: left;
+	padding: 0 0 30px;
+}
+
+.sub-content-total .sub-content-list {
+	padding-left: 32px;
+}
+
+.sub-content-total .sub-content-list:nth-child(1),
+.sub-content-total .sub-content-list:nth-child(5) {
+	padding-left: 0;
+}
+
+.sub-content-list img {
+	margin-left: -32px;
+}
+
+.list-link {
+	display: inherit;
+    height: 140px;
+    position: absolute;
+    width: 140px;
+    margin-left: -16px;
+}
+
+.link-title {
+	display: inline-block;
+	width: 140px;
+	color: #000;
+	font-size: 14px;
+
+}
+
+.link-title:hover {
+	text-decoration: underline;
+}
