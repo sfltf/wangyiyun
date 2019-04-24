@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="carousel-bg">
-      <el-carousel trigger="click" :interval="3000" arrow="always" height="336px" class="carousel-map" @change="changeBg">
+    <div class="carousel-bg" :style="{'background-image':  carouselBg[index].bgSrc}">
+      <el-carousel trigger="click" :interval="3000" arrow="always" height="336px" class="carousel-map" @change="changeBg" >
         <el-carousel-item v-for="(item,index) in carousel" :key="index">
-          <a :href="item.href">
+          <a class="el-link" :href="item.href" >
         	<img :src="item.imgSrc" alt="歌单">
           </a>
         </el-carousel-item>
@@ -49,14 +49,7 @@ export default {
         { bgSrc: 'url(/static/images/5bg.jpg)' },
         { bgSrc: 'url(/static/images/6bg.jpg)' }
       ],
-      carousel: [
-        { href: 'javascript:;', imgSrc: require('@/assets/images/1.jpg') },
-        { href: 'javascript:;', imgSrc: require('@/assets/images/2.jpg') },
-        { href: 'javascript:;', imgSrc: require('@/assets/images/3.jpg') },
-        { href: 'javascript:;', imgSrc: require('@/assets/images/4.jpg') },
-        { href: 'javascript:;', imgSrc: require('@/assets/images/5.jpg') },
-        { href: 'javascript:;', imgSrc: require('@/assets/images/6.jpg') }
-      ],
+      carousel: [],
       subHead: [{
           title: '热门推荐',moreSrc: 'javascript:;',breadIsShow: true,
           contentIsShow: [true,false,false]
@@ -77,7 +70,21 @@ export default {
       this.index = newIndex;
     }
   },
-  created() {}
+  created() {
+    let _self = this;
+    this.$http({
+      method: 'post',
+      url: '/test',
+      headers: {
+        'Content-Type':'application/x-www-form-urlencoded'
+      }
+    }).then(function(res) {
+      console.log(res.data);
+      _self.carousel = res.data;
+    }).catch(function(e) {
+      console.log()
+    })
+  }
 }
 
 </script>

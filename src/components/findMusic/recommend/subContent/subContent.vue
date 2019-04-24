@@ -2,9 +2,10 @@
 	<div class="sub-content">
 		<ul class="sub-content-total">
 			<li class="sub-content-list" v-for="(item,index) in music" :key="index">
-				<div>
+				<div style="position:relative">
 					<a class="list-link" :href="item.linkSrc"></a>
 					<img :src="item.imgSrc" alt="图片">
+					<div class="list-playVolume"></div>
 				</div>
 				<div>
 					<a :href="item.linkSrc" class="link-title">{{item.title}}</a>

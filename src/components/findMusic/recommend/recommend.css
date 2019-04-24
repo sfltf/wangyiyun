@@ -15,6 +15,13 @@
   margin-left: -491px;
 }
 
+.el-link {
+    height: 100%;
+    display: block;
+    width: 730px;
+    margin: 0 auto;
+}
+
 .carousel-map img {
   width: 730px;
   height: 336px;
