@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="carousel-bg" :style="{'background-image':  carouselBg[index].bgSrc}">
-      <el-carousel trigger="click" :interval="3000" arrow="always" height="336px" class="carousel-map" @change="changeBg" >
+      <el-carousel trigger="click" :interval="3000" arrow="always" height="336px" class="carousel-map" @change="changeBg">
         <el-carousel-item v-for="(item,index) in carousel" :key="index">
-          <a class="el-link" :href="item.href" >
-        	<img :src="item.imgSrc" alt="歌单">
+          <a :href="item.url" class="el-link">
+            <img :src="item.coverImgUrl" alt="歌单">
           </a>
         </el-carousel-item>
       </el-carousel>
@@ -20,8 +20,8 @@
         </el-breadcrumb>
       </subHead>
       <subContent v-if="item.contentIsShow[0]"></subContent>
-			<subContent1 v-else-if="item.contentIsShow[1]"></subContent1>
-			<subContent2 v-else-if="item.contentIsShow[2]"></subContent2>
+      <subContent1 v-else-if="item.contentIsShow[1]"></subContent1>
+      <subContent2 v-else-if="item.contentIsShow[2]"></subContent2>
     </div>
   </div>
 </template>
@@ -51,16 +51,22 @@ export default {
       ],
       carousel: [],
       subHead: [{
-          title: '热门推荐',moreSrc: 'javascript:;',breadIsShow: true,
-          contentIsShow: [true,false,false]
+          title: '热门推荐',
+          moreSrc: 'javascript:;',
+          breadIsShow: true,
+          contentIsShow: [true, false, false]
         },
         {
-          title: '新碟上架',moreSrc: 'javascript:;',breadIsShow: false,
-          contentIsShow: [false,true,false]
+          title: '新碟上架',
+          moreSrc: 'javascript:;',
+          breadIsShow: false,
+          contentIsShow: [false, true, false]
         },
         {
-          title: '榜单',moreSrc: 'javascript:;',breadIsShow: false,
-          contentIsShow: [false,false,true]
+          title: '榜单',
+          moreSrc: 'javascript:;',
+          breadIsShow: false,
+          contentIsShow: [false, false, true]
         }
       ]
     }
@@ -73,14 +79,14 @@ export default {
   created() {
     let _self = this;
     this.$http({
-      method: 'post',
-      url: '/test',
+      method: 'get',
+      url: '/top/playlist?limit=8&order=new',
       headers: {
-        'Content-Type':'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded'
       }
     }).then(function(res) {
       console.log(res.data);
-      _self.carousel = res.data;
+      _self.carousel = res.data.playlists;
     }).catch(function(e) {
       console.log()
     })

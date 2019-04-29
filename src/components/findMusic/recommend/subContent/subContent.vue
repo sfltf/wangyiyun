@@ -32,6 +32,18 @@
 		},
 		methods: {
 
+		},
+		created() {
+			let _self = this;
+			this.$http({
+				method: 'post',
+				url: '/top/playlist?limit=8&order=new'
+			}).then(function(res) {
+				console.log(res);
+				//_self.music = res.data.playlists;
+			}).catch(function(e) {
+				console.log(e)
+			})
 		}
 	}
 </script>

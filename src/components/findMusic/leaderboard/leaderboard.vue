@@ -15,10 +15,12 @@ export default {
   },
   methods: {
   	addList() {
-  		let obj = {};
-  		obj.text = Math.ceil(Math.random() * 100);
-  		this.list.push(obj);
-  		console.log(this.list);
+  		this.$http({
+  			method: 'get',
+  			url: 'search?keywords=海阔天空'
+  		}).then(function(res) {
+  			console.log(res)
+  		}) 
   	}
   }
 }
