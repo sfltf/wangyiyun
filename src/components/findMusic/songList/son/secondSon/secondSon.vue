@@ -2,7 +2,7 @@
   <div>
     <div>二级菜单1</div>
     <div>son55</div>
-    <router-view></router-view>
+    <!-- <router-view></router-view> -->
   </div>
 </template>
 <script>

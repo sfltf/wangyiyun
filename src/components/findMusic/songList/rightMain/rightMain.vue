@@ -16,8 +16,7 @@ export default {
   },
   methods: {
   	currentTab(val) {
-      console.log('123')
-  		console.log(val)
+      
   	}
   },
   mounted() {

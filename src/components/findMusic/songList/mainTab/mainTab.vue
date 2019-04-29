@@ -1,7 +1,9 @@
 <template>
   <el-tabs v-model="editableTabsValue" type="card" @edit="handleTabsEdit" @tab-click="checkTab">
     <el-tab-pane :key="index" v-for="(item, index) in editableTabs" closable :label="item.title" :name="item.name">
-      <component :is="comps[index]"></component>
+      <keep-alive>
+        <component :is="comps[index]"></component>
+      </keep-alive>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -26,20 +28,20 @@ export default {
   data() {
     return {
       index: 0,
-      editableTabsValue: '99',
+      editableTabsValue: '0100000000',
       editableTabs: [{
         title: 'home',
-        name: '99',
+        name: '0100000000',
       }],
-      comps: [homeTabContent,secondSon,secondSon1,secondSon2,secondSon3,son2,son3],
+      comps: [homeTabContent, secondSon, secondSon1, secondSon2, secondSon3, son2, son3],
       apps: []
       //tabIndex: 99
     }
   },
   methods: {
     checkTab(e) {
-    	console.log(e)
-    	this.$bus.$emit('updateMenu',e.label);
+      console.log(e)
+      this.$bus.$emit('updateMenu', e.label);
       //console.log(this.apps);
     },
     /*currentTab(val) {
@@ -68,7 +70,7 @@ export default {
         }
 
         this.editableTabsValue = activeName;
-        this.$bus.$emit('updateMenu',activeName);
+        this.$bus.$emit('updateMenu', activeName);
         this.editableTabs = tabs.filter(tab => tab.name !== targetName);
       }
     }

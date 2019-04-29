@@ -3,7 +3,7 @@
     <el-row class="tac">
       <el-col :span="4" style="position:absolute">
         <el-menu class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="selectedMenu" background-color="#545c64" text-color="#fff" unique-opened active-text-color="#ffd04b" :default-active="currentMenu" router>
-          <siderBar :menu="newMenu"></siderBar>
+          <siderBar :menu="menu"></siderBar>
         </el-menu>
       </el-col>
     </el-row>
@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       currentMenu: '/home',
-      newMenu: [],
+      serialN: 0,
       result: {},
       menu: []
       /*menu: [{
@@ -74,6 +74,19 @@ export default {
       }
       return this.result;
     },
+    addSerialN(arr) {
+      var _self = this;
+      for (var i = 0; i < arr.length; i++) {
+        if (!arr[i].children) {
+          arr[i]['serialN'] = _self.serialN;
+          ++_self.serialN;
+        } else if (arr[i].children) {
+          _self.addSerialN(arr[i].children);
+        }
+      }
+      //console.log(this.menu);
+      return this.menu;
+    },
     selectedMenu(index, indexPath) {
       this.currentMenu = this.$route.path;
       let _self = this;
@@ -86,36 +99,34 @@ export default {
       this.$bus.$emit('maincontent', obj) //触发事件
     },
     getPath() {
-      console.log(this.$route)
       this.currentMenu = this.$route.path;
     },
-    processMenu (data) {
-    	let _self = this;
-    	if(data !== null) {
-    		let map = {};
-    		data.forEach(function(item,index) {
-    			map[item.id] = item;
-    		})
-    		data.forEach(function(item,index) {
-    			var parent = map[item.parentId];
-    			//console.log(parent);
-    			if(parent) {
-    				(parent.children || (parent.children = [])).push(item);
-    			}else {
-    				_self.newMenu.push(item)
-    			}
-    		})
-    	}
-    	console.log(this.newMenu);
-    	return this.newMenu;
-    	
+    processMenu(data) {
+      let _self = this;
+      if (data !== null) {
+        let map = {};
+        data.forEach(function(item, index) {
+          map[item.id] = item;
+        })
+        data.forEach(function(item, index) {
+          var parent = map[item.parentId];
+          //console.log(parent);
+          if (parent) {
+            (parent.children || (parent.children = [])).push(item);
+          } else {
+            _self.menu.push(item)
+          }
+        })
+      }
+      return this.menu;
+
     }
   },
   watch: {
     '$route': 'getPath'
   },
   created() {
-  	let _self = this;
+    let _self = this;
     this.$http({
       method: 'get',
       url: '/getMenu',
@@ -123,9 +134,9 @@ export default {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     }).then(function(res) {
-      console.log(res);
-      _self.menu = _self.processMenu(res.data);
-
+      var oldMenu = _self.processMenu(res.data);
+      _self.addSerialN(oldMenu);
+      _self.menu = oldMenu;
     }).catch(function(e) {
       console.log(e);
     })
@@ -135,13 +146,10 @@ export default {
     let href = window.location.href;
     this.currentMenu = href.split('/#')[1];
     this.$bus.$on('updateMenu', function(val) {
-      console.log(val);
       let obj = _self.arrRecursive(_self.menu, val);
-      console.log(obj);
       _self.currentMenu = obj.path;
-      console.log(_self.currentMenu)
     })
-    console.log(_self.menu)
+    
   }
 }
 
