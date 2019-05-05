@@ -4,7 +4,7 @@
       <el-carousel trigger="click" :interval="3000" arrow="always" height="336px" class="carousel-map" @change="changeBg">
         <el-carousel-item v-for="(item,index) in carousel" :key="index">
           <a :href="item.url" class="el-link">
-            <img :src="item.coverImgUrl" alt="歌单">
+            <img :src="item.imageUrl" alt="歌单">
           </a>
         </el-carousel-item>
       </el-carousel>
@@ -47,6 +47,9 @@ export default {
         { bgSrc: 'url(/static/images/3bg.jpg)' },
         { bgSrc: 'url(/static/images/4bg.jpg)' },
         { bgSrc: 'url(/static/images/5bg.jpg)' },
+        { bgSrc: 'url(/static/images/6bg.jpg)' },
+        { bgSrc: 'url(/static/images/4bg.jpg)' },
+        { bgSrc: 'url(/static/images/5bg.jpg)' },
         { bgSrc: 'url(/static/images/6bg.jpg)' }
       ],
       carousel: [],
@@ -80,13 +83,13 @@ export default {
     let _self = this;
     this.$http({
       method: 'get',
-      url: '/top/playlist?limit=8&order=new',
+      url: '/banner',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     }).then(function(res) {
       console.log(res.data);
-      _self.carousel = res.data.playlists;
+      _self.carousel = res.data.banners;
     }).catch(function(e) {
       console.log()
     })

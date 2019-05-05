@@ -43,6 +43,7 @@
     <mall v-else-if="isShow[3]"></mall>
     <musician v-else-if="isShow[4]"></musician>
     <client v-else-if="isShow[5]"></client>
+    <playSong></playSong>  
   </div>
 </template>
 <script>
@@ -52,6 +53,7 @@ import friends from './friends/friends.vue'
 import mall from './mall/mall.vue'
 import musician from './musician/musician.vue'
 import client from './client/client.vue'
+import playSong from './playSong/playSong.vue'
 export default {
   name: 'index',
   components: {
@@ -60,7 +62,8 @@ export default {
     friends,
     mall,
     musician,
-    client
+    client,
+    playSong
   },
   data() {
     return {

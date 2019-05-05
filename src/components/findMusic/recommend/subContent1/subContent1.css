@@ -1,0 +1,70 @@
+.el-carousel__container {
+  height: 184px;
+}
+
+.el-carousel__arrow i {
+  color: #ccc;
+  font-size: 17px;
+  font-weight: bold;
+  position: relative;
+  top: -17px;
+}
+
+.el-icon-arrow-left {
+  margin-left: -35px;
+}
+
+.el-icon-arrow-right {
+  margin-right: -35px;
+}
+
+.el-carousel__arrow:hover {
+  background: none;
+}
+
+.new-album-total {
+  margin-top: 20px;
+  margin-left: 18px;
+}
+
+.new-album-list {
+  position: relative;
+  float: left;
+  width: 118px;
+  height: 150px;
+  margin-left: 10px;
+}
+
+.album-list-img {
+  margin-left: -18px;
+  width: 100px;
+  height: 100px;
+}
+
+.album-list-bg {
+  width: 118px;
+  height: 100px;
+  background-position: 0 -570px;
+  display: block;
+  position: absolute;
+  top: -1px;
+}
+
+.album-list-link {
+  display: inline-block;
+  width: 100%;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.album-list-name {
+  display: inline-block;
+  width: 100%;
+  color: #666;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: left;
+}
