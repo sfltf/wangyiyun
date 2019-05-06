@@ -87,6 +87,7 @@ export default {
     },
     // 改变进度条进度
     changeProgress(val) {
+    	let _self = this;
       let audio = this.$refs.player;
       this.playProgress = val;
       if (this.playProgress < 10) {
@@ -106,6 +107,10 @@ export default {
         this.currentTime = minute + ':' + second;
       }
       audio.currentTime = val;
+      if (audio.paused && this.playSongUrl !== '') {
+      	audio.play();
+      	_self.$refs.operatSong.setAttribute('class', 'play-current play-current-pause bottom-play-bg');
+      }
     }
   },
   created() {
@@ -206,8 +211,6 @@ export default {
     })
   }
 }
-
-//231006 231s 240
 
 </script>
 <style src="./playSong.css"></style>
