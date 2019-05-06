@@ -71,12 +71,114 @@
 }
 
 .bottom-play {
+	position: relative;
 	float: left;
 	width: 493px;
+	height: 53px;
 	margin-left: 10px;
-	margin-top: 30px;
 }
 
 .el-progress-bar__outer {
 	background: #161616;
+}
+
+.play-current-pause {
+	background-position: 0 -165px;
+}
+
+.play-current-pause:hover {
+	background-position: 0 -165px;
+}
+
+.el-progress {
+	bottom: -35px;
+} 
+
+.author-information {
+	position: absolute;
+	top: 13px;
+	left: 0;
+}
+
+.song-name {
+	color: #e8e8e8;
+	margin-right: 10px;
+}
+
+.author-name {
+	color: #9b9b9b;
+}
+
+.f-tdn {
+	position: absolute;
+	top: 28px;
+	left: -3px;
+	display: inline-block;
+	width: 22px;
+	height: 24px;
+	background-position: 0 -250px;
+}
+
+.song-time {
+	position: absolute;
+	right: -85px;
+	top: 32px;
+	color: #797979;
+}
+ 
+.song-time > em {
+	font-style: normal;
+	color: #a1a1a1
+}
+
+.el-slider__runway {
+	height: 9px;
+	background-color: #535353;
+	margin: 0;
+}
+
+.el-slider__bar {
+	height: 9px;
+	background-color: #c70c0c;
+	border-radius: 4px;
+}
+
+.el-slider__button {
+	position: absolute;
+	top: 8px;
+	left: 12px;
+	width: 22px;
+	height: 24px;
+	background: url('/static/images/iconall.png');
+	background-position: 0 -250px;
+	border: none;
+}
+
+.play-add {
+	position: absolute;
+    top: 20px;
+    left: 80px;
+    margin-right: 20px;
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	background-position: -88px -163px;
+}
+
+.play-add:hover {
+	background-position: -88px -189px;
+}
+
+.play-share {
+	position: absolute;
+    top: 20px;
+    left: 105px;
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	background-position: -114px -163px;
+}
+
+.play-share:hover {
+	background-position: -114px -189px;
 }

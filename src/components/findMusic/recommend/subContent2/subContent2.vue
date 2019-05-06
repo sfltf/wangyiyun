@@ -16,7 +16,7 @@
 						<span class="serialN">{{index + 1}}</span>
 						<a :href="item.href" class="bangdan-content-name" :title="item.name">{{item.name}}</a>
 						<span class="bangdan-content-opreat">
-							<a href="javascript:;" class="bangdan-content-play list-bg" title="播放"></a>
+							<a href="javascript:;" class="bangdan-content-play list-bg" :data-res-id="item.id" @click="addPlay" title="播放"></a>
 							<a href="javascript:;" class="bangdan-content-add icon-bg" title="添加到播放列表"></a>
 							<a href="javascript:;" class="bangdan-content-collection list-bg" title="收藏"></a>
 						</span>
@@ -41,7 +41,7 @@
 						<span class="serialN">{{index + 1}}</span>
 						<a href="javascript" class="bangdan-content-name" :title="item.name">{{item.name}}</a>
 						<span class="bangdan-content-opreat">
-							<a href="javascript:;" class="bangdan-content-play list-bg" title="播放" @click="addPlay"></a>
+							<a href="javascript:;" class="bangdan-content-play list-bg" :data-res-id="item.id" @click="addPlay" title="播放"></a>
 							<a href="javascript:;" class="bangdan-content-add icon-bg" title="添加到播放列表"></a>
 							<a href="javascript:;" class="bangdan-content-collection list-bg" title="收藏"></a>
 						</span>
@@ -66,7 +66,7 @@
 						<span class="serialN">{{index + 1}}</span>
 						<a href="javascript" class="bangdan-content-name" :title="item.name">{{item.name}}</a>
 						<span class="bangdan-content-opreat">
-							<a href="javascript:;" class="bangdan-content-play list-bg" title="播放"></a>
+							<a href="javascript:;" class="bangdan-content-play list-bg" :data-res-id="item.id" @click="addPlay" title="播放"></a>
 							<a href="javascript:;" class="bangdan-content-add icon-bg" title="添加到播放列表"></a>
 							<a href="javascript:;" class="bangdan-content-collection list-bg" title="收藏"></a>
 						</span>
@@ -90,7 +90,10 @@
 			}
 		},
 		methods: {
-
+			addPlay(e) {
+				console.log(e.target.dataset.resId);
+				this.$bus.$emit('sendID',e.target.dataset.resId);
+			}
 		},
 		created() {
 			let _self = this;
