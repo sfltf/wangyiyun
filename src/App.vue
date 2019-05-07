@@ -55,4 +55,8 @@ ul,li {
 .list-bg {
     background: url(/static/images/index.png);
 }
+
+.playList-bg {
+  background: url(/static/images/playlist.png);
+}
 </style>
