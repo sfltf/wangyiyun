@@ -7,12 +7,15 @@
         <a class="play-next bottom-play-bg" href="javascript:;" title="下一首(ctrl+→)"></a>
       </div>
       <div class="bottom-play-flag">
-        <img class="play-flag-img" :src="picUrl" alt="专辑图片">
+        <img :class="{'start-pic': isStartPic}" class="play-flag-img" :src="picUrl" alt="专辑图片">
+        <a href="javascript:;" class="play-album-bg bottom-play-bg"></a>
       </div>
       <div class="bottom-play">
         <span class="author-information">
           <a class="song-name" href="">{{songDetail.name}}</a>
-          <a class="author-name" href="">{{songDetail.ar[0].name}}</a>
+          <a class="author-name" href="" v-for="(itemName,itemindex) of songDetail.ar" :key="itemindex">
+            {{itemName.name}}
+          </a>
         </span>
         <el-slider v-model="playProgress" :show-tooltip="false" :min='0' :max="totalTime" @change="changeProgress" style="position:relative;bottom: -35px;"></el-slider>
         <span class="song-time">
@@ -34,11 +37,11 @@
           <a href="javascript:;" :class="{'icn-loop':cycle,'icn-one':singleCycle,'icn-shuffle':random}" class="bottom-play-bg" @click="switchPlayMode" :title="title"></a>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" :manual="true" content="已开始播放" placement="top">
-          <a href="javascript:;" class="play-list bottom-play-bg" style="text-decoration: none;" @click="isShowHiddenPlayList">{{playList.length}}</a>
+          <a href="javascript:;" class="play-list bottom-play-bg" style="text-decoration: none;outline:none;" @click="isShowHiddenPlayList">{{playList.length}}</a>
         </el-tooltip>
       </div>
     </div>
-    <play-list :class="{'play-list-hidden':isHiddenPlayList}" :playlist="playList" ></play-list>
+    <play-list :class="{'play-list-hidden':isHiddenPlayList}" :playlist="playList"></play-list>
     <audio :src="playSongUrl" autoplay id="player" ref="player"></audio>
   </div>
 </template>
@@ -46,16 +49,23 @@
 import playList from './playList/playList.vue'
 export default {
   components: {
-  	'play-list': playList
+    'play-list': playList
   },
   data() {
     return {
       playSongUrl: '', //歌曲url
       playProgress: 0, //播放进度
-      songDetail: {}, //歌曲详情
-      picUrl: '',
+      songDetail: {
+        songtime: '00:00', //初始时歌曲总时长
+        name: '',
+        ar: [{
+          name: ''
+        }]
+      }, //歌曲详情
+      picUrl: '/static/images/music.png', //歌曲图片
+      isStartPic: true, //初始图片显示
       currentTime: '00:00', //当前歌曲时长
-      totalTime: 0, //歌曲时长，进度条最大值
+      totalTime: 0, //歌曲时长,进度条最大值
       volume: 50, //音量
       isMute: true, //是否静音
       isHiddenVolume: true, //音量调整隐藏
@@ -67,7 +77,8 @@ export default {
       title: '循环',
       playListN: 0, //播放列表数量
       playList: [], //播放列表
-      isNotPause: false //是否暂停
+      isNotPause: false, //是否暂停
+      lastSongRecording: {}
     }
   },
   methods: {
@@ -189,38 +200,46 @@ export default {
     },
     // 播放列表隐藏显示
     isShowHiddenPlayList() {
-    	this.isHiddenPlayList = !this.isHiddenPlayList;
+      this.isHiddenPlayList = !this.isHiddenPlayList;
+      this.$bus.$emit('showScroll');
     }
   },
   created() {
     // 获取歌曲路径
-    let _self = this;
-    // 音乐相关信息
-    this.$http({
-      method: 'post',
-      url: '/song/detail?ids=1361195373'
-    }).then(function(res) {
-      console.log('获取歌曲内容')
-      _self.songDetail = res.data.songs[0];
-      _self.picUrl = _self.songDetail.al.picUrl;
-      let songTime = _self.songDetail.dt / (1000 * 60);
-      let minute = parseInt(songTime);
-      let second = ((songTime - minute) * 60).toFixed(0);
-      if (minute < 10) {
-        minute = '0' + minute;
-      }
+    if (JSON.stringify(this.lastSongRecording) === '{}') {
+      console.log('首次登陆网易云音乐');
+    } else {
+      let _self = this;
+      this.isStartPic = false;
+      // 音乐相关信息
+      this.$http({
+        method: 'post',
+        url: '/song/detail?ids=1361195373'
+      }).then(function(res) {
+        console.log('获取歌曲内容')
+        _self.songDetail = res.data.songs[0];
+        _self.picUrl = _self.songDetail.al.picUrl;
+        let songTime = _self.songDetail.dt / (1000 * 60);
+        let minute = parseInt(songTime);
+        let second = ((songTime - minute) * 60).toFixed(0);
+        if (minute < 10) {
+          minute = '0' + minute;
+        }
 
-      if (second < 10) {
-        second = '0' + second;
-      }
-      _self.songDetail.songtime = minute + ':' + second;
-    }).catch(function(e) {
-      console.log(e)
-    });
+        if (second < 10) {
+          second = '0' + second;
+        }
+        _self.songDetail.songtime = minute + ':' + second;
+      }).catch(function(e) {
+        console.log(e)
+      });
+    }
+
   },
   mounted() {
     let _self = this;
     this.$bus.$on('sendID', function(val) {
+      _self.isStartPic = false;
       let id = '/song/url?id=' + val;
       let detailId = '/song/detail?ids=' + val;
       // 播放音乐url
@@ -242,8 +261,8 @@ export default {
       }).then(function(res) {
         console.log('获取歌曲内容')
         let audio = _self.$refs.player;
-        console.log(res.data)
         _self.songDetail = res.data.songs[0];
+        console.log(_self.songDetail)
         _self.picUrl = _self.songDetail.al.picUrl;
         _self.totalTime = Math.floor(_self.songDetail.dt / 1000);
         let songTime = _self.songDetail.dt / (1000 * 60);
