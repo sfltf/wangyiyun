@@ -70,9 +70,9 @@ export default {
       this.songH = this.songList.length * 28;
       this.scrollH = this.songH - this.mskH;
       this.songProportion = this.mskH / this.songH;
-      console.log(this.songProportion);
       this.innerScrollH = this.mskH * this.songProportion;
       this.innerScrollDistance = this.scrollDistance;
+      console.log(this.innerScrollDistance);
       if (this.songH > this.mskH) {
         this.isShowHiddenScroll = false;
       } else {
@@ -127,7 +127,7 @@ export default {
       _self.songProportion = _self.mskH / _self.songH;
       _self.innerScrollH = _self.mskH * _self.songProportion;
       _self.innerH = _self.mskH - _self.innerScrollH;
-      _self.innerScrollDistance = 10 * (1 - (_self.mskH / _self.songH));
+      _self.innerScrollDistance = _self.scrollDistance * (1 - (_self.songProportion) / 1.5);
       if (_self.songH > _self.mskH) {
         _self.isShowHiddenScroll = false;
       } else {
