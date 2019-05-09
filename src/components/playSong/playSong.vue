@@ -23,7 +23,7 @@
           / {{songDetail.songtime}}
         </span>
       </div>
-      <span style="display: inline-block;width: 100px;position: absolute;">
+      <span style="display: inline-block;width: 52px;position: absolute;top: 20px;right: -105px;">
         <a href="javascript:;" class="play-add bottom-play-bg"></a>
         <a href="javascript:;" class="play-share bottom-play-bg"></a>
       </span>
@@ -66,7 +66,7 @@ export default {
       isStartPic: true, //初始图片显示
       currentTime: '00:00', //当前歌曲时长
       totalTime: 0, //歌曲时长,进度条最大值
-      volume: 50, //音量
+      volume: 0, //音量
       isMute: true, //是否静音
       isHiddenVolume: true, //音量调整隐藏
       isHiddenPlayList: true, //当前播放列表隐藏
@@ -148,6 +148,7 @@ export default {
         this.currentTime = minute + ':' + second;
       }
       audio.currentTime = val;
+      _self.$bus.$emit('getProgressTime', audio.currentTime); //点击进度条将时间传到歌词部分
       if (audio.paused && this.playSongUrl !== '') {
         audio.play();
         this.isNotPause = true;
@@ -278,6 +279,14 @@ export default {
         _self.songDetail.songtime = minute + ':' + second;
         let processLine = setInterval(function() {
           _self.currentTime = Math.floor(audio.currentTime);
+          // 在播放的时候才传当前播放时间
+          if (_self.isNotPause) {
+            let currentTime = parseFloat(audio.currentTime).toFixed(1); //传给子组件时间
+            _self.$bus.$emit('getCurrentTime', currentTime);
+          }
+
+          // 传递当前播放歌曲名
+          _self.$bus.$emit('getSongName', _self.songDetail.name);
           // 歌曲时间
           if (_self.currentTime < 10) {
             _self.currentTime = '00:0' + _self.currentTime;
@@ -306,18 +315,22 @@ export default {
             _self.isNotPause = false;
             clearInterval(processLine);
           }
-        }, 1000)
+        }, 100)
 
         // 添加播放列表
         try {
           if (_self.playList.length === 0) {
             _self.playList.push(_self.songDetail);
           } else {
-            _self.playList.forEach(function(item, index) {
-              if (val != item.id && index == _self.playList.length - 1) {
+            for (let i = 0; i < _self.playList.length; i++) {
+              if (val == _self.playList[i].id) {
+              	// 重播
+              	audio.currentTime = 0;
+                break;
+              } else if (val != _self.playList[i].id && i == _self.playList.length - 1) {
                 _self.playList.push(_self.songDetail);
               }
-            })
+            }
           }
         } catch (e) {
           console.log(e)

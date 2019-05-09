@@ -167,8 +167,8 @@
 
 .play-add {
   position: absolute;
-  top: 18px;
-  left: 80px;
+  top: 0;
+  left: 0;
   margin-right: 20px;
   display: inline-block;
   width: 25px;
@@ -182,8 +182,8 @@
 
 .play-share {
   position: absolute;
-  top: 18px;
-  left: 105px;
+  top: 0;
+  right: 0;
   display: inline-block;
   width: 25px;
   height: 25px;

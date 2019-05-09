@@ -91,8 +91,7 @@
 		},
 		methods: {
 			addPlay(e) {
-				console.log(e.target.dataset.resId);
-				this.$bus.$emit('sendID',e.target.dataset.resId);
+				this.$bus.$emit('sendID',this.dataset(e.target).resId);
 			}
 		},
 		created() {

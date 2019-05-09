@@ -22,6 +22,18 @@
     margin-left: 2px;
 }
 
+.play-song-name {
+	position: absolute;
+	right: 2px;
+	display: inline-block;
+	width: 425px;
+	height: 41px;
+	line-height: 41px;
+	text-align: center;
+	color: #fff;
+	font-size: 14px;
+}
+
 .collection-all,
 .collection-all1 {
 	position: relative;
@@ -131,6 +143,10 @@
     right: 175px;
 }
 
+.collection-song-list:hover .from-songList {
+	background-position: -80px 0;
+}
+
 .collection-song-singer > a:nth-child(1) ~ a {
 	display: inline-block;
 }
@@ -173,7 +189,7 @@
     right: 15px;
     width: 14px;
     height: 14px;
-    background-position: -80px 0px;
+    background-position: -100px 0px;
 }
 
 .song-operate {
@@ -190,6 +206,10 @@
 	background-position: -24px 0;
 }
 
+.ico-adds:hover {
+	background-position: -24px -20px;
+}
+
 .ico-share {
 	position: absolute;
     left: 25px;
@@ -198,6 +218,10 @@
 	width: 14px;
 	height: 16px;
 	background-position: 0 0;
+}
+
+.ico-share:hover {
+	background-position: 0 -20px;
 }
 
 .ico-dl {
@@ -210,6 +234,10 @@
 	background-position: -57px -50px;
 }
 
+.ico-dl:hover {
+	background-position: -80px -50px;
+}
+
 .icn-del {
 	position: absolute;
     left: 73px;
@@ -218,6 +246,10 @@
 	width: 13px;
 	height: 16px;
 	background-position: -51px 0;
+}
+
+.icn-del:hover {
+	background-position: -51px -20px;
 }
 
 /*滚动条样式*/
@@ -259,4 +291,39 @@
 
 .show-scroll {
 	display: none;
+}
+
+.right-msk {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 425px;
+	height: 260px;
+	background: #3e3836;
+}
+
+.lyrics_bg {
+	margin: 21px 0 20px 0;
+	height: 220px;
+	overflow: hidden;
+}
+
+.lyric-list {
+	margin: 0 auto;
+	width: 354px;
+	height: 32px;
+	line-height: 32px;
+	color: #989898;
+	transition: color 0.7s linear;
+}
+
+.light-lyric-list {
+	color: #fff;
+	font-size: 14px;
+	transition: color 0.7s linear;
+}
+
+.lyric-total {
+	top: 0;
+	transition: top 1s linear;
 }
