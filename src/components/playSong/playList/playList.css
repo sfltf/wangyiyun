@@ -333,7 +333,9 @@
 .lyric-list {
 	margin: 0 auto;
 	width: 354px;
+	height: auto !important;
 	height: 32px;
+	min-height: 32px;
 	line-height: 32px;
 	color: #989898;
 	transition: color 0.7s linear;
