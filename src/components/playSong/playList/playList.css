@@ -131,11 +131,18 @@
 	background-color: rgba(0,0,0,0.4);
 }
 
+.current-collection-song-list .collection-song-singer > a {
+	color: #fff;
+}
+
+.current-collection-song-list > span,
+.current-collection-song-list a,
 .collection-song-list:hover > span,
 .collection-song-list:hover a {
 	color: #fff;
 }
 
+.current-collection-song-list .song-operate
 .collection-song-list:hover .song-operate {
 	position: absolute;
 	display: block;
@@ -143,6 +150,21 @@
     right: 175px;
 }
 
+.playicn {
+	position: absolute;
+	left: 2px;
+	top: 8px;
+	display: inline-block;
+	width: 10px;
+	height: 13px;
+	background-position: -182px 0;
+}
+
+.current-collection-song-list {
+	background: #1a1a1a;
+    background-color: rgba(0,0,0,0.4);
+}
+.current-collection-song-list .from-songList,
 .collection-song-list:hover .from-songList {
 	background-position: -80px 0;
 }
@@ -299,7 +321,7 @@
 	right: 0;
 	width: 425px;
 	height: 260px;
-	background: #3e3836;
+	background: #4e4d4d;
 }
 
 .lyrics_bg {

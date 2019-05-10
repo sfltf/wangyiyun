@@ -89,6 +89,10 @@ export default {
       if (audio.paused && this.playSongUrl !== '') {
         this.isNotPause = true;
         audio.play();
+        // 播放时给子组件传递时间
+        setInterval(function() {
+          _self.$bus.$emit('getCurrentTime', parseFloat(audio.currentTime).toFixed(1));
+        }, 100)
         let processLine = setInterval(function() {
           _self.currentTime = Math.floor(audio.currentTime);
           // 歌曲时间
@@ -285,8 +289,13 @@ export default {
             _self.$bus.$emit('getCurrentTime', currentTime);
           }
 
-          // 传递当前播放歌曲名
-          _self.$bus.$emit('getSongName', _self.songDetail.name);
+          // 传递当前播放歌曲名,id
+          let songInformation = {};
+          songInformation.id = val;
+          songInformation.name = _self.songDetail.name;
+          _self.$bus.$emit('getSongName', songInformation);
+          // 当前歌曲正在播放标志
+          _self.songDetail.playSign = true;
           // 歌曲时间
           if (_self.currentTime < 10) {
             _self.currentTime = '00:0' + _self.currentTime;
@@ -323,9 +332,14 @@ export default {
             _self.playList.push(_self.songDetail);
           } else {
             for (let i = 0; i < _self.playList.length; i++) {
+              _self.playList[i].playSign = false;
+            }
+            for (let i = 0; i < _self.playList.length; i++) {
               if (val == _self.playList[i].id) {
-              	// 重播
-              	audio.currentTime = 0;
+                // 重播
+                audio.currentTime = 0;
+                // 当前播放重修改
+                _self.playList[i].playSign = true;
                 break;
               } else if (val != _self.playList[i].id && i == _self.playList.length - 1) {
                 _self.playList.push(_self.songDetail);
