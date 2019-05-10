@@ -264,11 +264,11 @@ export default {
     // 获取歌曲播放时间
     this.$bus.$on('getCurrentTime', function(val) {
       if (val == 0) {
-        console.log(_self.$refs.lyric);
-        console.log(_self.lyricLightRows);
         // 切换歌曲时，之前高亮取消,有时获取不到，可能是由于获取歌词时间慢了
-        if (_self.$refs.lyric || _self.$refs.lyric.length > 0) {
+        try {
           _self.$refs.lyric[_self.lyricLightRows].setAttribute('class', 'lyric-list');
+        } catch (e) {
+          console.log(e)
         }
         // 歌词回归顶部,滚动条回归顶部
         _self.$refs.lyricsTotal.style.top = _self.lyricsTop + 'px';
@@ -296,9 +296,11 @@ export default {
           }
 
           // 滚动条自动随歌曲自动滚
-          //_self.$refs.lyricsScroll 滚动条
-          if (index > 3) {
-            _self.$refs.lyricsScroll.style.top = _self.lyricsAutoScrollDistance * (index - 3) + 'px';
+          if (_self.lyricAutoScroll) {
+            if (index > 3) {
+              //_self.lyricsScrollTimes = Math.floor(_self.lyricsAutoScrollDistance * (index - 3) % _self.lyricScrollDistance);
+              _self.$refs.lyricsScroll.style.top = _self.lyricsAutoScrollDistance * (index - 3) + 'px';
+            }
           }
           return true;
         }
@@ -314,11 +316,13 @@ export default {
             _self.$refs.lyric[index].setAttribute('class', 'lyric-list light-lyric-list');
             if (_self.lyricAutoScroll) {
               _self.$refs.lyricsTotal.style.top = -32 * (index - 3) + 'px';
+              _self.$refs.lyricsScroll.style.top = _self.lyricsAutoScrollDistance * (index - 3) + 'px';
             }
             _self.lyricLightRows = index;
           } else if (val > parseFloat(_self.lyrics[_self.lyrics.length - 1][0]) || val > parseFloat(_self.lyrics[_self.lyrics.length - 2][0])) {
             if (_self.lyricAutoScroll) {
-              _self.$refs.lyricsTotal.style.top = -32 * (_self.lyrics.length - 4) + 'px';
+              //_self.lyricsScrollTimes = Math.floor(_self.lyricsAutoScrollDistance * (index - 3) % _self.lyricScrollDistance);
+              _self.$refs.lyricsTotal.style.top = -32 * (_self.lyrics.length - 4) + 'px';          
             }
           }
           if (index === _self.lyrics.length - 1) {
@@ -335,6 +339,8 @@ export default {
     })
   }
 }
+
+// 歌词有时会有多行高亮
 
 </script>
 <style src="./playList.css"></style>
