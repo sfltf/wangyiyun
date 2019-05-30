@@ -131,6 +131,12 @@
 	background-color: rgba(0,0,0,0.4);
 }
 
+.collection-song-list:hover .song-operate {
+	position: absolute;
+	display: block;
+	left: 275px;
+}
+
 .current-collection-song-list .collection-song-singer > a {
 	color: #fff;
 }
@@ -215,6 +221,7 @@
 }
 
 .song-operate {
+	position: absolute;
 	display: none;
 }
 

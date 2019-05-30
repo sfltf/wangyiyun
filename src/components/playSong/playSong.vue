@@ -1,10 +1,10 @@
 <template>
   <div class="bottom-play-bg">
-    <div style="position:relative;width: 731px;margin: 0 auto;">
+    <div style="position:relative;width: 986px;margin: 0 auto;">
       <div class="play-button">
-        <a class="play-pre bottom-play-bg" href="javascript:;" title="上一首(ctrl+←)"></a>
+        <a class="play-pre bottom-play-bg" href="javascript:;" title="上一首(ctrl+←)" @click="prePlay"></a>
         <a :class="{'play-current-pause': isNotPause}" class="play-current bottom-play-bg" href="javascript:;" title="播放/暂停(p)" ref="operatSong" @click="playSong"></a>
-        <a class="play-next bottom-play-bg" href="javascript:;" title="下一首(ctrl+→)"></a>
+        <a class="play-next bottom-play-bg" href="javascript:;" title="下一首(ctrl+→)" @click="nextPlay"></a>
       </div>
       <div class="bottom-play-flag">
         <img :class="{'start-pic': isStartPic}" class="play-flag-img" :src="picUrl" alt="专辑图片">
@@ -17,13 +17,13 @@
             {{itemName.name}}
           </a>
         </span>
-        <el-slider v-model="playProgress" :show-tooltip="false" :min='0' :max="totalTime" @change="changeProgress" style="position:relative;bottom: -35px;"></el-slider>
+        <el-slider v-model="playProgress" element-loading-spinner="el-icon-loading" :show-tooltip="false" :min='0' :max="totalTime" @change="changeProgress" style="position:relative;bottom: -35px;"></el-slider>
         <span class="song-time">
           <em>{{currentTime}} </em>
           / {{songDetail.songtime}}
         </span>
       </div>
-      <span style="display: inline-block;width: 52px;position: absolute;top: 20px;right: -105px;">
+      <span style="display: inline-block;width: 52px;position: absolute;top: 20px;right: 150px;">
         <a href="javascript:;" class="play-add bottom-play-bg"></a>
         <a href="javascript:;" class="play-share bottom-play-bg"></a>
       </span>
@@ -37,7 +37,7 @@
           <a href="javascript:;" :class="{'icn-loop':cycle,'icn-one':singleCycle,'icn-shuffle':random}" class="bottom-play-bg" @click="switchPlayMode" :title="title"></a>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" :manual="true" content="已开始播放" placement="top">
-          <a href="javascript:;" class="play-list bottom-play-bg" style="text-decoration: none;outline:none;" @click="isShowHiddenPlayList">{{playList.length}}</a>
+          <a href="javascript:;" class="play-list bottom-play-bg" style="text-decoration: none;outline:none;" title="播放列表" @click="isShowHiddenPlayList">{{playList.length}}</a>
         </el-tooltip>
       </div>
     </div>
@@ -78,7 +78,7 @@ export default {
       playListN: 0, //播放列表数量
       playList: [], //播放列表
       isNotPause: false, //是否暂停
-      lastSongRecording: {}
+      lastSongRecording: this.commonData.playSongList //进入网站后检测歌曲列表是否有数据
     }
   },
   methods: {
@@ -94,7 +94,7 @@ export default {
           _self.$bus.$emit('getCurrentTime', parseFloat(audio.currentTime).toFixed(1));
         }, 100)
         let processLine = setInterval(function() {
-          _self.currentTime = Math.floor(audio.currentTime);
+          _self.currentTime = Math.ceil(audio.currentTime);
           // 歌曲时间
           if (_self.currentTime < 10) {
             _self.currentTime = '00:0' + _self.currentTime;
@@ -132,6 +132,7 @@ export default {
     },
     // 改变进度条进度
     changeProgress(val) {
+      console.log(val);
       let _self = this;
       let audio = this.$refs.player;
       this.playProgress = val;
@@ -154,8 +155,11 @@ export default {
       audio.currentTime = val;
       _self.$bus.$emit('getProgressTime', audio.currentTime); //点击进度条将时间传到歌词部分
       if (audio.paused && this.playSongUrl !== '') {
-        audio.play();
-        this.isNotPause = true;
+        if (this.isNotPause) {
+          audio.play();
+        }
+
+        //this.isNotPause = true;
       }
     },
     // 改变音量显示隐藏
@@ -207,40 +211,42 @@ export default {
     isShowHiddenPlayList() {
       this.isHiddenPlayList = !this.isHiddenPlayList;
       this.$bus.$emit('showScroll');
+    },
+    // 上一首播放
+    prePlay() {
+      let audio = this.$refs.player;
+      console.log(this.playList)
+      this.playList.forEach(function(item,index) {
+        if(item.playSign) {
+          console.log(index);
+        }
+      })
+    },
+    // 下一首播放
+    nextPlay() {
+      
+    },
+    // 获取播放过的播放列表
+    getLocalData() {
+      let audio = this.$refs.player;
+      // 获取歌曲路径
+      if (this.lastSongRecording.length === 0 || JSON.parse(this.lastSongRecording).length === 0) {
+        console.log('首次登陆网易云音乐');
+      } else {
+        let _self = this;
+        this.isStartPic = false;
+        console.log(JSON.parse(localStorage.getItem('playList')));
+        let localData = JSON.parse(localStorage.getItem('playList'));
+        _self.playList = JSON.parse(localStorage.getItem('playList'));
+        _self.songDetail = localData[localData.length - 1];
+        _self.playSongUrl = localData[localData.length - 1].playSongUrl;
+        _self.picUrl = localData[localData.length - 1].al.picUrl;
+        _self.songDetail.songtime = localData[localData.length - 1].songtime;
+        audio.pause();
+      }
     }
   },
-  created() {
-    // 获取歌曲路径
-    if (JSON.stringify(this.lastSongRecording) === '{}') {
-      console.log('首次登陆网易云音乐');
-    } else {
-      let _self = this;
-      this.isStartPic = false;
-      // 音乐相关信息
-      this.$http({
-        method: 'post',
-        url: '/song/detail?ids=1361195373'
-      }).then(function(res) {
-        console.log('获取歌曲内容')
-        _self.songDetail = res.data.songs[0];
-        _self.picUrl = _self.songDetail.al.picUrl;
-        let songTime = _self.songDetail.dt / (1000 * 60);
-        let minute = parseInt(songTime);
-        let second = ((songTime - minute) * 60).toFixed(0);
-        if (minute < 10) {
-          minute = '0' + minute;
-        }
-
-        if (second < 10) {
-          second = '0' + second;
-        }
-        _self.songDetail.songtime = minute + ':' + second;
-      }).catch(function(e) {
-        console.log(e)
-      });
-    }
-
-  },
+  created() {},
   mounted() {
     let _self = this;
     this.$bus.$on('sendID', function(val) {
@@ -252,9 +258,18 @@ export default {
         method: 'get',
         url: id
       }).then(function(res) {
-        console.log('获取歌曲')
-        _self.playSongUrl = res.data.data[0].url;
-        _self.isNotPause = true;
+        console.log('获取歌曲');
+        const loading = _self.$loading({
+          target: document.querySelector('.el-slider__button'),
+          lock: true,
+        });
+        if (res.data) {
+          loading.close();
+          _self.playSongUrl = res.data.data[0].url;
+          // localStorage歌曲url数据
+          //_self.songDetail.playSongUrl = _self.playSongUrl; //这首歌曲的url
+          _self.isNotPause = true;
+        }
       }).catch(function(e) {
         console.log(e)
       });
@@ -268,6 +283,19 @@ export default {
         let audio = _self.$refs.player;
         _self.songDetail = res.data.songs[0];
         console.log(_self.songDetail)
+        // 将播放列表数据存储到本地中
+        /*let checkSongUrl = setInterval(function() {
+          if (_self.songDetail.playSongUrl) {
+            console.log(_self.lastSongRecording);
+            _self.lastSongRecording.push(_self.songDetail);
+            localStorage.setItem('playList', JSON.stringify(_self.lastSongRecording));
+            console.log('本地存储数据');
+            console.log(JSON.parse(localStorage.getItem('playList')));
+            clearInterval(checkSongUrl);
+          }
+        }, 500)*/
+
+
         _self.picUrl = _self.songDetail.al.picUrl;
         _self.totalTime = Math.floor(_self.songDetail.dt / 1000);
         let songTime = _self.songDetail.dt / (1000 * 60);
@@ -282,11 +310,12 @@ export default {
         }
         _self.songDetail.songtime = minute + ':' + second;
         let processLine = setInterval(function() {
-          _self.currentTime = Math.floor(audio.currentTime);
+          _self.currentTime = Math.round(audio.currentTime);
           // 在播放的时候才传当前播放时间
           if (_self.isNotPause) {
             let currentTime = parseFloat(audio.currentTime).toFixed(1); //传给子组件时间
             _self.$bus.$emit('getCurrentTime', currentTime);
+            //console.log(currentTime);
           }
 
           // 传递当前播放歌曲名,id
@@ -354,9 +383,31 @@ export default {
       });
     })
     //检测音量
-    this.checkVolume()
+    this.checkVolume();
+    // 歌曲循环方式
+    setInterval(function() {
+      let audio = _self.$refs.player;
+      if (audio.ended) {
+        console.log('触发')
+        _self.nextPlay();
+        _self.playProgress = 0;
+        _self.currentTime = '00:00';
+        _self.isNotPause = true;
+      }
+    }, 1000)
+    // 本地缓存数据
+    //this.getLocalData();
   }
 }
+
+// 当歌曲在加载时出现loading
+// 进度条加载
+// const loading = _self.$loading({
+//   target: document.querySelector('.el-slider__button'),
+//   lock: true,
+// });
+
+// localStorage只能接收字符串数据
 
 </script>
 <style src="./playSong.css"></style>

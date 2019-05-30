@@ -8,7 +8,7 @@
         <span class="ico-add playList-bg"></span>
         <span class="ico-add-name">收藏全部</span>
       </a>
-      <a href="javascript:;" class="collection-all1">
+      <a href="javascript:;" class="collection-all1" @click="clearAll">
         <span class="ico-clear playList-bg"></span>
         <span class="ico-clear-name">清空</span>
       </a>
@@ -37,10 +37,10 @@
           <div :class="{'show-scroll': isShowHiddenScroll}" :style="{height: innerScrollH + 'px'}" class="inner-scroll" ref="innerScroll" style="top: 0"></div>
         </div>
       </div>
-      <div class="right-msk">
+      <div class="right-msk" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
         <div class="lyrics_bg">
           <ul ref="lyricsTotal" style="position: relative;top: 0" class="lyric-total" @mousewheel="lyricsScroll">
-            <li class="lyric-list" v-for="(item,index) of lyrics" :key="index" :data-time="item[0]" ref="lyric">
+            <li :class="{'light-lyric-list': lyrics[index][2]}" class="lyric-list" v-for="(item,index) of lyrics" :key="index" :data-time="item[0]" ref="lyric">
               {{item[1]}}
             </li>
           </ul>
@@ -78,6 +78,7 @@ export default {
       currentSongName: '', //当前正在播放歌曲名
       currentLyricLight: false, //当前歌词高亮
       lyricLightRows: 0, //当前歌词高亮行数
+      isLyricLight: false, //当前歌词是否高亮
       lyricAutoScroll: true, //歌词自动滚动
       lyricScrollDistance: 192, //歌词每次滚动距离
       preTime: 0, //上次滚动时间
@@ -144,7 +145,7 @@ export default {
         _self.lyricAutoScroll = false;
       }
       // 歌词随滚轮滚动
-      if (event.wheelDelta > 0) {
+      if (event.wheelDelta < 0) {
         ++this.lyricsScrollTimes;
         if (this.lyricsScrollTimes > this.lyricsCanScrollTimes) {
           this.lyricsScrollTimes = this.lyricsCanScrollTimes;
@@ -181,6 +182,80 @@ export default {
           _self.lyricAutoScroll = false;
         }
       }, 1500)
+    },
+    // 歌词处理
+    processingLyric(res) {
+      let _self = this;
+      let lyrics = res.data.lrc.lyric.split('\n'); //待时间戳的歌词
+      console.log(lyrics)
+      lyrics.forEach(function(item, index) {
+        if (item !== "") {
+          try {
+            _self.lyrics[index] = [];
+            console.log(item);
+            let sj = item.match(/\[\d{2}:\d{2}\.\d{1,3}\]/g); //获取时间
+            //将时间处理成以秒为单位
+            console.log(sj);
+            if (sj !== null) {
+              var sjArr = sj[0].replace(/\[|\]/g, '').split(':');
+            }
+            let time = 0;
+            sjArr.forEach(function(item, index) {
+              try {
+                if (index === 0) {
+                  time += parseFloat(item) * 60;
+                } else if (index === 1) {
+                  time += parseFloat(item);
+                  if (time !== 0) {
+                    time = time.toFixed(1)
+                  }
+                }
+              } catch (e) {
+                console.log(e);
+              }
+            })
+            let _lrc = lyrics[index].replace(/\[\d{2}:\d{2}\.\d{1,3}\]/g, ""); //获取歌词
+            if (sjArr || _lrc) {
+              _self.lyrics[index].splice(0, 0, time);
+              _self.lyrics[index].splice(1, 0, _lrc);
+              _self.lyrics[index].splice(2, 0, _self.isLyricLight);
+              /*_self.lyrics[index] = Object.assign({}, _self.lyrics[index], {
+                time: time,
+                lyric: _lrc,
+                isLyricLight: _self.isLyricLight
+              })*/
+            }
+          } catch (e) {}
+        }
+      })
+      console.log(_self.lyrics);
+    },
+    // 清除所有播放列表中的歌曲
+    clearAll() {
+      this.songList.splice(0, this.songList.length);
+    }
+  },
+  created() {
+    let _self = this;
+    if (localStorage.getItem('playList')) {
+      let songData = JSON.parse(localStorage.getItem('playList'));
+      let val = songData[songData.length - 1].id;
+      let url = '/lyric?id=' + val;
+      this.$http({
+        method: 'get',
+        url: url
+      }).then(function(res) {
+        const loading = _self.$loading({
+          target: document.querySelector('.right-msk'),
+          lock: true,
+        });
+        if (res.data) {
+          loading.close();
+          _self.processingLyric(res);
+        }
+      }).catch(function(e) {
+        console.log(e)
+      })
     }
   },
   mounted() {
@@ -228,47 +303,31 @@ export default {
           method: 'get',
           url: url
         }).then(function(res) {
-          let lyrics = res.data.lrc.lyric.split('\n'); //待时间戳的歌词
-          lyrics.forEach(function(item, index) {
-            if (item !== "") {
-              _self.lyrics[index] = [];
-              let sj = item.match(/\[\d{2}:\d{2}\.\d{1,3}\]/g); //获取时间
-              //将时间处理成以秒为单位
-              let sjArr = sj[0].replace(/\[|\]/g, '').split(':');
-              let time = 0;
-              sjArr.forEach(function(item, index) {
-                try {
-                  if (index === 0) {
-                    time += parseFloat(item) * 60;
-                  } else if (index === 1) {
-                    time += parseFloat(item);
-                    if (time !== 0) {
-                      time = time.toFixed(1)
-                    }
-                  }
-                } catch (e) {
-                  console.log(e);
-                }
-              })
-              let _lrc = lyrics[index].replace(/\[\d{2}:\d{2}\.\d{1,3}\]/g, ""); //获取歌词
-              if (sjArr || _lrc) {
-                _self.lyrics[index].push(time);
-                _self.lyrics[index].push(_lrc);
-              }
-            }
-          })
+          const loading = _self.$loading({
+            target: document.querySelector('.right-msk'),
+            lock: true,
+          });
+          if (res.data) {
+            loading.close();
+            console.log(res.data)
+            _self.processingLyric(res);
+          }
         }).catch(function(e) {
           console.log(e)
         })
       })
     // 获取歌曲播放时间
+    //if(this.)
     this.$bus.$on('getCurrentTime', function(val) {
+      //console.log(val);
       if (val == 0) {
         // 切换歌曲时，之前高亮取消,有时获取不到，可能是由于获取歌词时间慢了
-        try {
-          _self.$refs.lyric[_self.lyricLightRows].setAttribute('class', 'lyric-list');
-        } catch (e) {
-          console.log(e)
+        if (_self.lyrics) {
+          _self.$nextTick(function() {
+            _self.lyrics[_self.lyricLightRows].splice(2, 1, false);
+            _self.$forceUpdate();
+          })
+          //_self.$set(_self.lyrics[_self.lyricLightRows], 2, false);
         }
         // 歌词回归顶部,滚动条回归顶部
         _self.$refs.lyricsTotal.style.top = _self.lyricsTop + 'px';
@@ -280,28 +339,54 @@ export default {
       }
       _self.lyrics.some(function(item, index) {
         if (val == parseFloat(item[0])) {
-          _self.$refs.lyric[index].setAttribute('class', 'lyric-list light-lyric-list');
+          if (_self.lyrics) {
+            _self.$nextTick(function() {
+              _self.lyrics[index].splice(2, 1, true);
+              _self.$forceUpdate();
+            })
+
+            //_self.$refs.lyric[index].setAttribute('class','lyric-list light-lyric-list')
+            //_self.$set(_self.lyrics[index], 2, true);
+            console.log(_self.lyrics[index][2]);
+          }
+
           _self.lyricLightRows = index;
+          console.log(_self.lyricLightRows)
           if (index >= 3) {
             if (_self.lyricAutoScroll) {
               _self.$refs.lyricsTotal.style.top = -32 * (index - 3) + 'px';
             }
           }
           if (index > 0) {
-            _self.$refs.lyric[index - 1].setAttribute('class', 'lyric-list');
+            _self.$nextTick(function() {
+              _self.lyrics[index - 1].splice(2, 1, false);
+              _self.$forceUpdate();
+            })
+            //_self.$set(_self.lyrics[index - 1], 2, false);
           }
 
           if (index === _self.lyrics.length - 1) {
-            _self.$refs.lyric[index].setAttribute('class', 'lyric-list');
+            _self.$nextTick(function() {
+              _self.lyrics[index].splice(2, 1, false);
+              _self.$forceUpdate();
+            })
+            //_self.$set(_self.lyrics[index], 2, false)
           }
 
           // 滚动条自动随歌曲自动滚
           if (_self.lyricAutoScroll) {
             if (index > 3) {
-              //_self.lyricsScrollTimes = Math.floor(_self.lyricsAutoScrollDistance * (index - 3) % _self.lyricScrollDistance);
+              console.log(Math.abs(parseInt(_self.$refs.lyricsTotal.style.top)))
+              console.log(_self.lyrics.length * 32);
+              console.log(_self.lyricsCanScrollTimes)
+              let currentH = Math.abs(parseInt(_self.$refs.lyricsTotal.style.top));
+              let everyH = _self.lyrics.length * 32 / _self.lyricsCanScrollTimes;
+              _self.lyricsScrollTimes = currentH / everyH; //记录滚动条自动滚动的次数
+              console.log(_self.lyricsScrollTimes);
               _self.$refs.lyricsScroll.style.top = _self.lyricsAutoScrollDistance * (index - 3) + 'px';
             }
           }
+
           return true;
         }
       })
@@ -312,8 +397,16 @@ export default {
       _self.lyrics.forEach(function(item, index) {
         if (_self.lyrics[index] && index < (_self.lyrics.length - 1)) {
           if (parseFloat(_self.lyrics[index][0]) < val && val < parseFloat(_self.lyrics[index + 1][0]) && index < _self.lyrics.length - 1) {
-            _self.$refs.lyric[_self.lyricLightRows].setAttribute('class', 'lyric-list');
-            _self.$refs.lyric[index].setAttribute('class', 'lyric-list light-lyric-list');
+            _self.$nextTick(function() {
+              console.log(_self.lyricLightRows);
+              _self.lyrics.forEach(function(item, index) {
+                item.splice(2, 0, false);
+              })
+              //_self.lyrics[_self.lyricLightRows].splice(2, 0, false);
+              _self.lyrics[index].splice(2, 0, true);
+              _self.$forceUpdate();
+            })
+
             if (_self.lyricAutoScroll) {
               _self.$refs.lyricsTotal.style.top = -32 * (index - 3) + 'px';
               _self.$refs.lyricsScroll.style.top = _self.lyricsAutoScrollDistance * (index - 3) + 'px';
@@ -321,13 +414,19 @@ export default {
             _self.lyricLightRows = index;
           } else if (val > parseFloat(_self.lyrics[_self.lyrics.length - 1][0]) || val > parseFloat(_self.lyrics[_self.lyrics.length - 2][0])) {
             if (_self.lyricAutoScroll) {
-              //_self.lyricsScrollTimes = Math.floor(_self.lyricsAutoScrollDistance * (index - 3) % _self.lyricScrollDistance);
-              _self.$refs.lyricsTotal.style.top = -32 * (_self.lyrics.length - 4) + 'px';          
+              _self.$refs.lyricsTotal.style.top = -32 * (_self.lyrics.length - 4) + 'px';
+            } else {
+
             }
           }
           if (index === _self.lyrics.length - 1) {
-            _self.$refs.lyric[index].setAttribute('class', 'lyric-list');
+            _self.lyrics[index].splice(2, 0, true);
           }
+
+          let currentH = Math.abs(parseInt(_self.$refs.lyricsTotal.style.top));
+          let everyH = _self.lyrics.length * 32 / _self.lyricsCanScrollTimes;
+          _self.lyricsScrollTimes = currentH / everyH; //
+          console.log(_self.lyricsScrollTimes);
         }
       })
     })
@@ -337,6 +436,7 @@ export default {
       _self.currentSongName = val.name;
       _self.preSongId = val.id;
     })
+
   }
 }
 

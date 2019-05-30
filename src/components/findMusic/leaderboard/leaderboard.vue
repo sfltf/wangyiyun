@@ -1,28 +1,36 @@
 <template>
   <ul>
-    <li v-for="(item,index) of list" :key="index">{{item.text}}</li>
-    <button @click="addList">增加</button>
+    <li :class="{'list-color': list[index].text}" v-for="(item,index) of list" :key="index">{{item.text}}</li>
+    <button @click="addList">修改</button>
   </ul>
 </template>
 <script>
 export default {
   data() {
     return {
-      list: [
-        { text: '1233' }
-      ]
+      list: []
     }
   },
+  created() {
+  	let _self = this;
+    for (let i = 0; i < 100; i++) {
+      this.list.push({text: false})
+    }
+  },
+  mounted() {
+  	let _self = this;
+  	let i = 0;	
+  },
   methods: {
-  	addList() {
-  		this.$http({
-  			method: 'get',
-  			url: 'search?keywords=海阔天空'
-  		}).then(function(res) {
-  			console.log(res)
-  		}) 
-  	}
+    addList() {
+      this.list[1].text = true
+    }
   }
 }
 
 </script>
+<style>
+	.list-color {
+		color: #f00;
+	}
+</style>
