@@ -1,0 +1,39 @@
+.song-lyrics {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.show-lyric {
+    display: none;
+}
+
+.expand {
+    float: left;
+    text-align: left;
+    color: #0c73c2;
+    cursor: pointer;
+}
+
+.icon-expand {
+    display: inline-block;
+    width: 11px;
+    height: 8px;
+    background-position: -65px -520px;
+}
+
+.icon-collapse {
+    display: inline-block;
+    width: 11px;
+    height: 8px;
+    background-position: -45px -520px;
+}
+
+.report-error {
+    clear: both;
+    text-align: right;
+}
+
+.report-error a {
+    color: #999;
+    text-decoration: underline;
+}

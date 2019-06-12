@@ -2,7 +2,7 @@
   <div>
     <nav class="subMeun">
       <ul class="subMeun-total">
-        <li class="subMeun-list" v-for="(item,index) in subMenu" @click="chooseTap(index)">
+        <li class="subMeun-list" v-for="(item,index) in subMenu" @click="chooseTap(index)" :key="index">
           <a href="javascript:;">
             <span :class="{'subMeun-list-active': item.isShow}">{{item.title}}</span>
           </a>

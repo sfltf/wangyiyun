@@ -1,0 +1,99 @@
+.comment-title {
+    clear: both;
+    height: 33px;
+    line-height: 33px;
+    margin-top: 30px;
+    border-bottom: 2px solid #c20c0c;
+    text-align: left;
+}
+
+.comment-name {
+    font-size: 20px;
+    margin-right: 20px;
+}
+
+.comment-num {
+    color: #666;
+}
+
+.user-comment {
+    position: relative;
+    margin-top: 20px;
+    height: 64px;
+}
+
+.user-avatar {
+    float: left;
+    width: 50px;
+    height: 50px;
+}
+
+.comment-right {
+    position: absolute;
+    width: 100%;
+    float: right;
+    padding-left: 62px;
+    box-sizing: border-box;
+}
+
+.comment-area {
+    float: right;
+    margin-left: 62px;
+    width: 100%;
+    height: 62px;;
+}
+
+.comment-area textarea {
+    outline: none;
+}
+
+.el-textarea__inner {
+    padding: 10px 15px;
+    height: auto !important;
+}
+
+.icon-expression {
+    display: inline-block;
+    margin-right: 8px;
+    width: 18px;
+    height: 18px;
+    background-position: -40px -490px;
+}
+
+.icon-say {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-position: -60px -490px;;
+}
+
+.user-operate {
+    text-align: left;
+    margin-top: 10px;
+    margin-left: 61px;
+}
+
+.comment-font-num {
+    float: right;
+    color: #999;
+    line-height: 25px;
+    margin-right: 10px;
+}
+
+.comment-send {
+    float: right;
+    width: 46px;
+    height: 25px;
+    line-height: 25px;
+    color: #fff;
+    background-position: -84px -64px;
+}
+
+.comment-send:hover {
+    background-position: -84px -94px;
+}
+
+.emtitm {
+    display: inline-block;
+    margin: 4px;
+}

@@ -1,9 +1,9 @@
 <template>
-  <el-carousel :interval="5000" arrow="always" style="margin: 20px 0 0;height: 186px; border: 1px solid #ccc;box-sizing:border-box;">
+  <el-carousel :interval="5000" arrow="always" ref="albums" style="margin: 20px 0 0;height: 186px; border: 1px solid #ccc;box-sizing:border-box;">
     <el-carousel-item v-for="(item,fIndex) in 2" :key="item" style="height: 184px;">
       <ul class="new-album-total" v-for="(item,index) of albums[fIndex]" :key="index">
         <li class="new-album-list ">
-          <img class="album-list-img" :src="item.artist.picUrl" alt="">
+          <img class="album-list-img" :data-src="item.artist.picUrl" ref="albumsImg" alt="">
           <a href="javascript:;" class="album-list-bg cover-bg"></a>
           <p>
             <a href="javascript:;" class="album-list-link">
@@ -31,7 +31,17 @@ export default {
     }
   },
   methods: {
-
+    lazyImg () {
+      let albumsImgHeight = this.$refs.albums.$el.getBoundingClientRect();
+      let bodyScrollHeight = document.body.scrollTop; //滚动条滚动距离
+      let windowClient = window.innerHeight; //浏览器可视高度
+      let albumsImg = this.$refs.albumsImg;
+      for(var i = 0; i < albumsImg.length; i++) {    
+        if(albumsImgHeight.top < bodyScrollHeight + windowClient + 50) {
+          albumsImg[i].setAttribute('src',albumsImg[i].getAttribute('data-src'));
+        }
+      }
+    }
   },
   created() {
     // 新碟上架
@@ -55,6 +65,12 @@ export default {
       console.log(_self.albums);
       //_self.albums = res.data.albums
     })
+  },
+  mounted() {
+    let _self = this;
+    window.onmousewheel = function() {
+      _self.lazyImg()
+    }
   }
 }
 

@@ -198,9 +198,9 @@
   display: inline-block;
   width: 6px;
   background-position: -147px -240px;
-  margin-left: 16px;
   position: absolute;
   top: 10px;
+  right: 135px;
 }
 
 .icn-vol {
@@ -318,6 +318,7 @@
   width: 34px;
   height: 34px;
   position: absolute;
+  z-index: 9;
   top: 12px;
   left: 0;
   background-position: 0 -80px;

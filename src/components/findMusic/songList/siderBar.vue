@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-for="(item,index) of subMenu">
+    <template v-for="(item) of subMenu">
     	<!-- 无子 -->
       <el-menu-item :index="item.path" v-if="!item.children">
         <i :class="item.iconName"></i>

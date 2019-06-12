@@ -38,12 +38,12 @@
 .collection-all1 {
 	position: relative;
 	top: 10px;
-	right: 446px;
+	right: 385px;
 	color: #ccc;
 }
 
 .collection-all1 {
-	right: 495px;
+	right: 435px;
 }
 
 .collection-all:hover,
@@ -227,6 +227,7 @@
 
 .ico-adds {
 	position: absolute;
+	z-index: 99;
     left: 0;
     top: 7px;
 	display: inline-block;
@@ -241,6 +242,7 @@
 
 .ico-share {
 	position: absolute;
+	z-index: 99;
     left: 25px;
     top: 7px;
 	display: inline-block;
@@ -255,6 +257,7 @@
 
 .ico-dl {
 	position: absolute;
+	z-index: 99;
     left: 49px;
     top: 7px;
 	display: inline-block;
@@ -269,6 +272,7 @@
 
 .icn-del {
 	position: absolute;
+	z-index: 99;
     left: 73px;
     top: 7px;
 	display: inline-block;

@@ -29,6 +29,12 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+button {
+  border: none;
+  outline: none;
+}
+
 ul,li {
   list-style: none;
   margin-top: 0;
@@ -54,6 +60,34 @@ ul,li {
 
 .list-bg {
     background: url(/static/images/index.png);
+}
+
+.icon-bg {
+	background: url(/static/images/icon.png) no-repeat;
+}
+
+.icon2 {
+  background: url(/static/images/icon2.png) no-repeat;
+}
+
+.icon-vip {
+  background: url(/static/images/vip.png) no-repeat;
+}
+
+.icon-package {
+  background: url(/static/images/package.png) no-repeat;
+}
+
+.icon-yearVip {
+  background: url(/static/images/yearVip.png) no-repeat;
+}
+
+.icon-button {
+  background: url(/static/images/button2.png) no-repeat;
+}
+
+.icon-button2 {
+  background: url(/static/images/button.png) no-repeat;
 }
 
 .playList-bg {

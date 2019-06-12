@@ -12,20 +12,32 @@ import SecondSon2 from '@/components/findMusic/songList/son1/secondSon2/secondSo
 import SecondSon3 from '@/components/findMusic/songList/son1/secondSon3/secondSon3'
 import ElementUI from 'element-ui'
 
+/* 网易云音乐路由 */
+import SongDetail from '@/components/findMusic/songDetail/songDetail'
+import RecommendSon from '@/components/findMusic/recommend/recommendSon'
 Vue.use(Router)
 Vue.use(ElementUI)
 
 export default new Router({
   routes: [{
     path: '/',
-    name: 'Index',
     component: Index,
-    children: [{
+    children: [
+      {
+        path: '',
+        component: RecommendSon
+      },
+      { 
+        name: 'song',
+        path: 'song',
+        component: SongDetail
+      },
+      {
         path: 'home',
         name: 'home',
         //component: rightMain
       },
-      {
+      /* {
         path: 'son',
         name: 'Son',
         component: Son,
@@ -66,7 +78,7 @@ export default new Router({
         path: '/son3',
         name: 'Son3',
         //component: Son3
-      }
+      } */
     ]
   }]
 })

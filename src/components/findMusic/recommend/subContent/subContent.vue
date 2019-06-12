@@ -11,7 +11,7 @@
 						<span class="list-playCount">{{item.playCount}}</span>
 					</div>
 				</div>
-				<div style="position:relative;">
+				<div style="position:relative;height: 41px;">
 					<a :href="item.linkSrc" class="link-title">{{item.name}}</a>
 				</div>
 			</li>
