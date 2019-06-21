@@ -1,5 +1,5 @@
 <template>
-  <el-carousel :interval="5000" arrow="always" ref="albums" style="margin: 20px 0 0;height: 186px; border: 1px solid #ccc;box-sizing:border-box;">
+  <el-carousel :interval="5000" arrow="always" ref="albums" style="margin: 20px 0 0;height: 186px; border: 1px solid #ccc;box-sizing:border-box;background:#f5f5f5;">
     <el-carousel-item v-for="(item,fIndex) in 2" :key="item" style="height: 184px;">
       <ul class="new-album-total" v-for="(item,index) of albums[fIndex]" :key="index">
         <li class="new-album-list ">
@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     lazyImg () {
-      let albumsImgHeight = this.$refs.albums.$el.getBoundingClientRect();
+      let albumsImgHeight = this.$refs.albums.$el.getBoundingClientRect();   
       let bodyScrollHeight = document.body.scrollTop; //滚动条滚动距离
       let windowClient = window.innerHeight; //浏览器可视高度
       let albumsImg = this.$refs.albumsImg;

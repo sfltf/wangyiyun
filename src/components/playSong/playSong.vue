@@ -151,12 +151,14 @@ export default {
     };
   },
   computed: {
-    ...mapState(['playList']),
-    ...mapGetters(['getPlayListLength']),
+    ...mapState({
+      playList: state => state.song.playList
+    }),
+    ...mapGetters('song',['getPlayListLength']),
   },
   methods: {
     // 歌曲播放
-    ...mapMutations(['addPlayList']),
+    ...mapMutations('song',['addPlayList']),
     //获取路由
     getRouter () {
       console.log('触发')
@@ -411,7 +413,7 @@ export default {
       let detailId = "/song/detail?ids=" + val;
       // 播放音乐url
       this.$http({
-        method: "get",
+        method: "post",
         url: id
       })
         .then(function(res) {
@@ -438,7 +440,7 @@ export default {
 
       // 音乐相关信息展示
       this.$http({
-        method: "post",
+        method: "get",
         url: detailId
       })
         .then(function(res) {
@@ -526,7 +528,7 @@ export default {
              _self.addPlayList(_self.songDetail);
             } else {
               for (let i = 0; i < _self.getPlayListLength; i++) {
-                _self.$store.state.playList[i].playSign = false;
+                _self.playList[i].playSign = false;
               }
               for (let i = 0; i < _self.getPlayListLength; i++) {
                 if (val == _self.playList[i].id) {

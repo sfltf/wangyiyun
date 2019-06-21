@@ -32,11 +32,13 @@
             v-else-if="item.user.vipRights && item.user.vipRights.redVipAnnualCount > 0"
           ></span>
           <span class="colon">:</span>
+          <div id="hotComments"></div>
           <p
             class="comments-content"
             v-for="(Initem,Inindex) of item.hotComments"
             :key="Inindex"
-          >{{Initem}}</p>
+            v-html="Initem"
+          ></p>
           <div class="reply">
             <span>{{item.time}}</span>
             <span class="like">
@@ -84,7 +86,8 @@
             class="comments-content"
             v-for="(Initem,Inindex) of item.hotComments"
             :key="Inindex"
-          >{{Initem}}</p>
+            v-html="Initem"
+          ></p>
           <div class="reply">
             <span>{{item.time}}</span>
             <span class="like">
@@ -101,7 +104,7 @@
       next-text="> 下一页"
       background
       layout="prev, pager, next"
-      :page-size = "pageSize"
+      :page-size="pageSize"
       :total="pageTotal"
       @current-change="getCurrentPage"
     ></el-pagination>
@@ -122,16 +125,26 @@ export default {
     };
   },
   computed: {
-    ...mapState(["songId", "commentNum", "expression"])
+    //["songId", "commentNum", "expression"]
+    ...mapState({
+      songId: state => state.song.songId,
+      commentNum: state => state.song.commentNum,
+      expression: state => state.song.expression
+    })
   },
   methods: {
     //   获取今年已过时间
     getYearPastTime() {
-      let currentYear = new Date().getFullYear();
+      let [currentYear, currentMonth, currentDay] = [
+        new Date().getFullYear(),
+        new Date().getMonth() + 1,
+        new Date().getDate()
+      ];
+      //let currentYear = new Date().getFullYear();
       this.pastYearTime =
         new Date().getTime() - new Date(currentYear + "-01-01").getTime();
-      let currentMonth = new Date().getMonth() + 1;
-      let currentDay = new Date().getDate() - 1;
+      //let currentMonth = new Date().getMonth() + 1;
+      //let currentDay = new Date().getDate() - 1;
       this.pastDayTime =
         new Date().getTime() -
         new Date(currentYear + "-" + currentMonth + "-" + currentDay).getTime();
@@ -144,7 +157,9 @@ export default {
         "/comment/music?id=" +
         this.songId +
         "&limit=" +
-        this.pageSize + '&offset=' + (this.page - 1) * this.pageSize;
+        this.pageSize +
+        "&offset=" +
+        (this.page - 1) * this.pageSize;
       this.$http({
         method: "get",
         url: commentUrl
@@ -155,10 +170,9 @@ export default {
           if (page > 1) {
             _self.comments = res.data.comments;
             _self.processingComments(_self.comments);
-            console.log(_self.comments)
           } else {
             _self.hotComments = res.data.hotComments;
-            _self.comments = res.data.comments;         
+            _self.comments = res.data.comments;
             _self.processingComments(_self.hotComments);
             _self.processingComments(_self.comments);
           }
@@ -176,65 +190,80 @@ export default {
         //console.log(new Date().getTime() - item.time)
         if (new Date().getTime() - item.time <= 3600000) {
           //console.log(_self.moment(item.time).format("mm分钟前"));
-          item.time = _self.moment(new Date().getTime() - item.time).format("m分钟前");
-        } else if (new Date().getTime() - item.time <= _self.pastDayTime) {
+          item.time = _self
+            .moment(new Date().getTime() - item.time)
+            .format("m分钟前");
+        } else if (
+          new Date().getTime() - item.time <
+          _self.pastDayTime
+        ) {
+          item.time = _self
+            .moment(item.time)
+            .format("HH:mm");
+        } else if ( _self.pastDayTime <= new Date().getTime() - item.time && new Date().getTime() - item.time  <= _self.pastDayTime + 24 * 60 * 60 * 1000) {
           //console.log(_self.moment(item.time).format("昨天 HH:mm"));
           item.time = _self.moment(item.time).format("昨天 HH:mm");
-        } else if (new Date().getTime() - item.time <= _self.pastYearTime) {
+        } else if (new Date().getTime() - item.time < _self.pastYearTime) {
           //console.log(_self.moment(item.time).format("M月DD日 HH:mm"));
-          item.time = _self.moment(item.time).format("M月DD日 HH:mm");
+          item.time = _self.moment(item.time).format("M月D日 HH:mm");
         } else if (new Date().getTime() - item.time > _self.pastYearTime) {
-          item.time = _self.moment(item.time).format("YYYY年M月DD日");
+          item.time = _self.moment(item.time).format("YYYY年M月D日");
         }
         //item.time = _self.moment(item.time).format("YYYY年M月DD日 h:mm:ss");
         let lyrics = item.content.split("\n");
         lyrics.forEach(function(inItem, Inindex) {
-          let expression = inItem.match(/\[(.+?)\]/g); //获取表情
-          if (expression) {
-            expression.forEach(function(value) {
-              _self.expression.forEach(function(value1) {
-                /*
-                 * 如何将文字变成图片
-                 */
-                if (value == value1[0]) {
-                  let newItem = inItem.replace(/\[(.+?)\]/g, value1[1]);
-                  _self.expressions = value1[1];
-                  item.hotComments.push(newItem);
-                }
+          if (inItem !== "") {
+            let expression = inItem.match(/\[(.+?)\]/g); //获取表情
+            if (expression) {
+              expression.forEach(function(value, order) {
+                _self.expression.forEach(function(value1, order1) {
+                  if (value == value1[0]) {
+                    let newItem = inItem.replace(/\[(.+?)\]/g, value1[1]);
+                    if (order == expression.length - 1) {
+                      item.hotComments.push(newItem);
+                    }
+                  }
+                });
               });
-            });
-          } else {
-            item.hotComments.push(inItem);
+            } else {
+              item.hotComments.push(inItem);
+            }
           }
         });
-        //console.log(lyrics);
       });
     }
   },
   mounted() {
+    console.log(this.songId);
     let _self = this;
-    let commentUrl =
-      "/comment/music?id=" +
-      this.songId +
-      "&limit=" +
-      this.page * this.pageSize;
-    this.$http({
-      method: "get",
-      url: commentUrl
-    })
-      .then(function(res) {
-        _self.hotComments = [];
-        _self.comments = [];
-        console.log(res);
-        _self.hotComments = res.data.hotComments;
-        _self.pageTotal = res.data.total;
-        _self.comments = res.data.comments;
-        _self.processingComments(_self.hotComments);
-        _self.processingComments(_self.comments);
-      })
-      .catch(function(e) {
-        console.log(e);
-      });
+    let getID = setInterval(function() {
+      if (_self.songId) {
+        let commentUrl =
+          "/comment/music?id=" +
+          _self.songId +
+          "&limit=" +
+          _self.page * _self.pageSize;
+        _self
+          .$http({
+            method: "get",
+            url: commentUrl
+          })
+          .then(function(res) {
+            _self.hotComments = [];
+            _self.comments = [];
+            console.log(res);
+            _self.hotComments = res.data.hotComments;
+            _self.pageTotal = res.data.total;
+            _self.comments = res.data.comments;
+            _self.processingComments(_self.hotComments);
+            _self.processingComments(_self.comments);
+          })
+          .catch(function(e) {
+            console.log(e);
+          });
+        clearInterval(getID);
+      }
+    });
   }
 };
 </script>

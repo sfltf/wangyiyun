@@ -5,7 +5,8 @@
       <span class="comment-num">共{{commentNum}}条评论</span>
     </div>
     <div class="user-comment">
-      <img class="user-avatar" src="/static/images/default_avatar.jpg" alt="头像">
+      <img class="user-avatar" :src="userInformation.avatarUrl" alt="头像" v-if="userInformation.avatarUrl">
+      <img class="user-avatar" src="/static/images/default_avatar.jpg" alt="头像" v-else>  
       <div class="comment-right">
         <el-input type="textarea" placeholder="评论" v-model="textarea" autosize resize="none"></el-input>
       </div>
@@ -30,7 +31,12 @@ export default {
     };
   },
   computed: {
-    ...mapState(["commentNum","expression"])
+      //["commentNum","expression"]
+    ...mapState({
+        commentNum: state => state.song.commentNum,
+        expression: state => state.song.expression,
+        userInformation: state => state.user.userInformation
+    })
   },
   methods: {
       setSrc () {

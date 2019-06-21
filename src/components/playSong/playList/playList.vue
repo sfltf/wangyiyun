@@ -133,8 +133,10 @@ export default {
     /* getPlayList () {
       return this.$store.state.playList;
     }, */
-    ...mapState(["playList"]),
-    ...mapGetters(["getPlayListLength"])
+    ...mapState({
+      playList: state => state.song.playList
+    }),
+    ...mapGetters('song',["getPlayListLength"])
     /* getPlayListLength () {
       return this.$store.state.playList.length;
     } */
@@ -147,7 +149,7 @@ export default {
     stopMove(event) {
       event.preventDefault();
     },
-    ...mapMutations(["deletePlayList", "deleteAll"]),
+    ...mapMutations('song',["deletePlayList", "deleteAll"]),
     // 传递歌曲id
     play(e) {
       let _self = this;

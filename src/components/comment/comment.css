@@ -130,3 +130,9 @@
     cursor: pointer;
 }
 
+.comments-content img {
+    position: relative;
+    top: -1px;
+    vertical-align: middle;
+}
+

@@ -1,0 +1,234 @@
+.login-margin {
+    float: left;
+    width: 240px;
+    margin: 0 35px 3px 40px;
+    border-right: 1px dotted #999;
+}
+
+.login-playform {
+    display: block;
+    padding: 0 35px 3px 40px;
+    width: 100%;
+    height: 120px;
+}
+
+.el-dialog {
+    border-radius: 3px;
+}
+
+.el-dialog__header {   
+    padding: 0;
+    padding-left: 18px;
+    text-align: left;
+    height: 38px;
+    line-height: 40px;
+    background: #000;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.el-dialog__body {
+    padding: 0;
+    overflow: hidden;
+}
+
+.login-padding {
+    overflow: hidden;
+    padding: 30px 20px;
+}
+
+.el-dialog__headerbtn {
+    top: 10px;
+    color: #aaa;
+}
+
+.el-dialog__title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.el-dialog__headerbtn .el-dialog__close {
+    font-size: 16px;
+}
+
+.icon-login {
+    float: left;
+    width: 218px;
+    height: 31px;
+    line-height: 31px;
+    color: #fff;
+    background-position: 0 -387px;
+}
+
+.icon-register {
+    margin-top: 10px;
+    clear: both;
+    float: left;
+    width: 219px;
+    height: 31px;
+    line-height: 31px;
+    color: #000;
+    background-position: 0 -59px;
+}
+
+.login-margin .el-row {
+    width: 224px;
+    position: relative;
+    left: -11px;
+}
+
+.icon-supplement {
+    float: left;
+    width: 6px;
+    height: 31px;
+    background-position: right -428px;
+}
+
+.icon-supplement1 {
+    margin-top: 10px;
+    float: left;
+    width: 5px;
+    height: 31px;
+    background-position: right -100px;
+}
+
+.icon-wx {
+    display: inline-block;
+    margin-right: 14px;
+    width: 38px;
+    height: 38px;
+    background-position: -150px -670px;
+}
+
+.icon-QQ {
+    display: inline-block;
+    margin-right: 14px;
+    width: 38px;
+    height: 38px;
+    background-position: -190px -670px;
+}
+
+.icon-weibo {
+    display: inline-block;
+    margin-right: 14px;
+    width: 38px;
+    height: 38px;
+    background-position: -231px -670px;
+}
+
+.icon-Wy {
+    display: inline-block;
+    margin-right: 14px;
+    width: 38px;
+    height: 38px;
+    background-position: -271px -670px; 
+}
+
+.login-style {
+    float: left;
+}
+
+.login-total .login-list:first-child {
+    margin-top: 6px;
+}
+
+.login-list {
+    clear: both;
+    overflow: hidden;
+    text-align: left;
+    margin-top: 11px;
+}
+
+.icon-img {
+    float: left;
+}
+
+.login-list-name {
+    position: relative;
+    top: 7px;
+}
+
+/* .el-select .el-input {
+    width: 50px;
+} */
+
+.input-with-select .el-input-group__prepend {
+background-color: #fff;
+}
+
+.current-login {
+    position: relative;
+    margin-top: 15px;
+    width: 220px;
+    margin: auto;
+}
+
+.current-login .el-input input {
+    padding: 0;
+    padding-left: 5px;
+}
+
+.current-login .el-input__suffix-inner i{
+    font-size: 10px;
+    width: 12px;
+}
+
+.el-input-group__append, .el-input-group__prepend {
+    width: 14px;
+}
+
+.el-scrollbar__view {
+    width: 217px;
+    height: 150px;
+}
+
+.opreate-password { 
+    width: 220px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.el-checkbox__label {
+    font-size: 12px;
+}
+
+.current-login .icon-login {
+    width: 214px;
+    cursor: pointer;
+}
+
+.current-login .icon-login,
+.current-login .icon-supplement {
+    margin-top: 15px;
+}
+
+.dialog-footer {
+    margin-top: 15px;
+    height: 49px;
+    line-height: 49px;
+    border-top: 1px solid #c6c6c6;
+    background-color: #c7c7c7;
+}
+
+.login-back {
+    float: left;
+    padding-left: 19px;
+    color: #0c72c3;
+    cursor: pointer;
+}
+
+.register-back {
+    float: right;
+    padding-right: 19px;
+    cursor: pointer;
+}
+
+.error-user {
+    position: absolute;
+    bottom: -24px;
+    left: 0;
+    color: #f00;
+}
+
+

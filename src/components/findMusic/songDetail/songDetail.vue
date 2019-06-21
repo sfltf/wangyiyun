@@ -3,7 +3,7 @@
     <div class="song-left">
       <div class="song-padding">
         <div class="play-disk">
-          <img class="albums" :src="songDetail.al.picUrl" alt>
+          <img class="albums" :src="songDetail.al.picUrl" alt="头像">
           <span class="play-disk-bg cover-bg"></span>
         </div>
         <div class="song-detail">
@@ -90,30 +90,40 @@ export default {
     },
   data() {
     return {
-      songDetail: {}, //歌曲详情
+      songDetail: {
+          al: {
+              picUrl: ''
+          }
+      }, //歌曲详情
       songComment: {}, //歌曲评论
     };
   },
   computed: {
-      ...mapState(['songId','commentNum'])
+      //['songId','commentNum']
+      ...mapState({
+          songId: state => state.song.songId,
+          commentNum: state => state.song.commentNum
+      })
   },
   methods: {
-      ...mapMutations(['setSongId','setCommentNum'])
+      ...mapMutations('song',['setSongId','setCommentNum'])
   },
   mounted() {
+    let _self = this;
     let id = this.$route.query.id;
+    console.log(id);
     this.setSongId(id);
     console.log(this.songId)
     let urlDetail = "/song/detail?ids=" + id;
-    let urlComment = "/comment/music?id=" + id;
-    let _self = this;
+    let urlComment = "/comment/music?id=" + id; 
     console.log(this.$route);
     this.$http({
-      method: "get",
+      method: "post",
       url: urlDetail
     }).then(function(res) {
-      console.log(res.data.songs[0]);
+      //console.log(res.data.songs[0]);
       _self.songDetail = res.data.songs[0];
+      console.log(_self.songDetail)
     });
 
     this.$http({

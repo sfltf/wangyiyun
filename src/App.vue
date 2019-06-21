@@ -59,11 +59,23 @@ ul,li {
 }
 
 .list-bg {
-    background: url(/static/images/index.png);
+  background: url(/static/images/index.png);
+}
+
+.icon-toplist {
+  background: url(/static/images/toplist.png) no-repeat;
+}
+
+.icon-date {
+  background: url(/static/images/date.png) no-repeat;  
 }
 
 .icon-bg {
 	background: url(/static/images/icon.png) no-repeat;
+}
+
+.icon-platform {
+  background: url(/static/images/platform.png) no-repeat;
 }
 
 .icon2 {
@@ -80,6 +92,10 @@ ul,li {
 
 .icon-yearVip {
   background: url(/static/images/yearVip.png) no-repeat;
+}
+
+.icon-logo {
+  background: url(/static/images/logo.png) no-repeat;
 }
 
 .icon-button {
