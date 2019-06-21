@@ -10,27 +10,48 @@ import SecondSon from '@/components/findMusic/songList/son/secondSon/secondSon'
 import SecondSon1 from '@/components/findMusic/songList/son/secondSon1/secondSon1'
 import SecondSon2 from '@/components/findMusic/songList/son1/secondSon2/secondSon2'
 import SecondSon3 from '@/components/findMusic/songList/son1/secondSon3/secondSon3'
-import ElementUI from 'element-ui'
+
 
 /* 网易云音乐路由 */
 import SongDetail from '@/components/findMusic/songDetail/songDetail'
 import RecommendSon from '@/components/findMusic/recommend/recommendSon'
+import My from '@/components/myMusic/myMusic'
+import FindMusic from '@/components/findMusic/findMusic'
+import Login from '@/components/login/login'
 Vue.use(Router)
-Vue.use(ElementUI)
 
-export default new Router({
+
+const router = new Router({
   routes: [{
     path: '/',
     component: Index,
     children: [
       {
         path: '',
-        component: RecommendSon
+        component: FindMusic,
+        children: [
+          {
+            path: '',
+            component: RecommendSon
+          }
+        ]
       },
-      { 
+      {
+        path: 'login',
+        component: Login
+      },
+      {
         name: 'song',
         path: 'song',
         component: SongDetail
+      },
+      {
+        name: 'my',
+        path: 'my',
+        component: My,
+        meta: {
+          requiresAuth: true
+        }
       },
       {
         path: 'home',
@@ -82,3 +103,30 @@ export default new Router({
     ]
   }]
 })
+router.beforeEach((to, from, next) => {
+  let original = document.cookie.split(' ');
+  let needCookie = original.map(item => item.split('='));
+  let uid = needCookie.filter(item => {
+    if(item[0] == 'wyy_uid') {
+      return item[1];
+    }
+  })
+  console.log(uid)
+  if (to.matched.some(function (record) {
+    return record.meta.requiresAuth;
+  })) {
+    if (uid.length == 0) {
+      next({
+        path: '/login',
+        qurey: { redirect: to.fullPath }
+      })
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+})
+
+
+export default router
